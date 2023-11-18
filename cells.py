@@ -28,7 +28,7 @@ for i in range(initial_cells):
 # Invert grid
 grid = np.logical_not(grid)
 
-@njit
+@njit(fastmath=True)
 def get_neighbours(grid, x, y):
         
         # Get number of neighbours
@@ -51,7 +51,7 @@ def get_neighbours(grid, x, y):
         
         return neighbours
 
-@njit
+@njit(parallel=True, fastmath=True)
 def run_generation(grid):
     
     new_grid = np.zeros((width, height))
@@ -159,6 +159,12 @@ while running:
     if keys[pg.K_SPACE]:
         pg.time.delay(200)
         paused = not paused
+        
+    if keys[pg.K_ESCAPE]:
+        running = False
+    
+    if keys[pg.K_r]:
+        grid = np.zeros((width, height))
         
         
     for event in pg.event.get():
